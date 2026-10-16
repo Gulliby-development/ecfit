@@ -55,6 +55,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	reports := make([]FileReport, 0, len(paths))
 	staged := make([]stagedFile, 0, len(paths))
 	checked := 0
+	skipped := 0
 	for _, path := range paths {
 		settings, err := config.Resolve(parsed.Root, path.Actual)
 		if err != nil {
@@ -72,6 +73,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 			return 2
 		}
 		if bytes.IndexByte(data, 0) >= 0 {
+			skipped++
 			continue
 		}
 
@@ -103,14 +105,14 @@ func Run(args []string, stdout, stderr io.Writer) int {
 			writeError(stderr, err)
 			return 2
 		}
-		_, _ = io.WriteString(stdout, FormatFix(reports))
+		_, _ = io.WriteString(stdout, appendSkippedSummary(FormatFix(reports), skipped))
 		if hasFindings(reports) {
 			return 1
 		}
 		return 0
 	}
 
-	_, _ = io.WriteString(stdout, FormatCheck(reports, checked))
+	_, _ = io.WriteString(stdout, appendSkippedSummary(FormatCheck(reports, checked), skipped))
 	if hasFindings(reports) {
 		return 1
 	}

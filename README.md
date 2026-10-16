@@ -125,7 +125,7 @@ trim_trailing_whitespace = false
 final-newline mismatches (EC003), indentation style violations (EC004),
 indent-size violations (EC005), maximum line-length violations (EC006), and
 UTF-8 byte-order-mark or validity problems (EC007). Files containing a NUL
-byte are skipped.
+byte are skipped. The last line of the `check` and `fix` reports then ends with the number of skipped files, for example `ok, 3 files checked, 1 binary file skipped`.
 
 `fix` safely handles byte-order marks, trailing whitespace, line endings, and
 final newlines. It leaves indentation, line length, and invalid UTF-8 issues

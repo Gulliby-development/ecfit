@@ -278,7 +278,7 @@ func TestBuiltCLIExamplesAndRawBytes(t *testing.T) {
 	if err := os.WriteFile(nulFile, nulBytes, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if code, out, err := runBuiltCLI(t, executable, project, "check", "--root", nulRoot, nulFile); code != 0 || out != "ok, 0 files checked\n" || err != "" {
+	if code, out, err := runBuiltCLI(t, executable, project, "check", "--root", nulRoot, nulFile); code != 0 || out != "ok, 0 files checked, 1 binary file skipped\n" || err != "" {
 		t.Fatalf("NUL check = (%d, %q, %q)", code, out, err)
 	}
 	if got, err := os.ReadFile(nulFile); err != nil || !bytes.Equal(got, nulBytes) {
