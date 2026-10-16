@@ -102,6 +102,13 @@ func FormatFix(files []FileReport) string {
 	return output.String()
 }
 
+func appendSkippedSummary(report string, skipped int) string {
+	if skipped == 0 {
+		return report
+	}
+	return strings.TrimSuffix(report, "\n") + fmt.Sprintf(", %d binary %s skipped\n", skipped, text.Plural(skipped, "file", "files"))
+}
+
 func fixedCodes(findings []rules.Finding) []string {
 	seen := make(map[string]bool)
 	codes := make([]string, 0, len(findings))
