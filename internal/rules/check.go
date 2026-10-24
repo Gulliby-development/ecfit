@@ -68,6 +68,10 @@ func Check(data []byte, settings map[string]config.Setting) []Finding {
 				findings = append(findings, Finding{Line: line.Number, Code: "EC004", Message: "indented with a space, expected tabs"})
 			}
 
+			if indentStyle == "" && leading.hasTab && leading.hasSpace {
+				findings = append(findings, Finding{Line: line.Number, Code: "EC008", Message: "indentation mixes tabs and spaces"})
+			}
+
 			if hasIndentSize && indentStyle != "tab" && leading.allSpaces && leading.count%indentSize != 0 {
 				findings = append(findings, Finding{
 					Line: line.Number, Code: "EC005",
@@ -175,6 +179,7 @@ type indent struct {
 	count     int
 	first     byte
 	hasTab    bool
+	hasSpace  bool
 	allSpaces bool
 }
 
@@ -191,6 +196,8 @@ func leadingIndent(content []byte) indent {
 		if b == '\t' {
 			result.hasTab = true
 			result.allSpaces = false
+		} else {
+			result.hasSpace = true
 		}
 	}
 	return result
