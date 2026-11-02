@@ -30,7 +30,7 @@ The standalone help output is:
 ```text
 usage: ecfit explain [--root DIR] FILE
        ecfit check [--root DIR] PATH...
-       ecfit fix [--root DIR] PATH...
+       ecfit fix [--root DIR] [--dry-run] PATH...
 ```
 
 Pass `--root DIR` or `--root=DIR` to choose the project root; the default is
@@ -82,6 +82,22 @@ Fixing the project reports the remaining issues:
 ./web/app.js:4: EC004 indented with a tab, expected spaces
 ./web/app.js:5: EC006 line is 63 characters long, the limit is 60
 fixed 4 files, 6 problems left
+```
+
+Add `--dry-run` to `fix` (only to `fix`, anywhere among the options, no value) to see what `fix` would do without writing any file. The report is the one `fix` prints with `would fix` in place of `fixed`, and the exit code is the same as for `fix`. Running `ecfit fix --dry-run .` on the project above prints:
+
+```text
+./data.json: would fix EC007
+./docs/guide.md: would fix EC001
+./docs/guide.md:4: EC006 line is 87 characters long, the limit is 80
+./main.go: would fix EC002
+./util.go: would fix EC003
+./util.go:4: EC004 indented with a space, expected tabs
+./web/app.js:2: EC005 indent of 2 spaces is not a multiple of 4
+./web/app.js:3: EC005 indent of 3 spaces is not a multiple of 4
+./web/app.js:4: EC004 indented with a tab, expected spaces
+./web/app.js:5: EC006 line is 63 characters long, the limit is 60
+would fix 4 files, 6 problems left
 ```
 
 ## Settings

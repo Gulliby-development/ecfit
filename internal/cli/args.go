@@ -13,7 +13,7 @@ import (
 // Usage is the complete help text, without its final line feed.
 const Usage = "usage: ecfit explain [--root DIR] FILE\n" +
 	"       ecfit check [--root DIR] PATH...\n" +
-	"       ecfit fix [--root DIR] PATH..."
+	"       ecfit fix [--root DIR] [--dry-run] PATH..."
 
 // Args contains the validated command and its operands.
 type Args struct {
@@ -21,6 +21,7 @@ type Args struct {
 	Root    string
 	Paths   []string
 	Help    bool
+	DryRun  bool
 }
 
 // ParseArgs parses command-line arguments and validates the selected root.
@@ -39,6 +40,7 @@ func ParseArgs(argv []string) (Args, error) {
 	}
 
 	root := "."
+	dryRun := false
 	paths := make([]string, 0, len(argv)-1)
 	for i := 1; i < len(argv); i++ {
 		arg := argv[i]
@@ -51,6 +53,8 @@ func ParseArgs(argv []string) (Args, error) {
 			root = argv[i]
 		case strings.HasPrefix(arg, "--root="):
 			root = strings.TrimPrefix(arg, "--root=")
+		case arg == "--dry-run" && command == "fix":
+			dryRun = true
 		case strings.HasPrefix(arg, "-"):
 			return Args{}, fmt.Errorf("unknown option %s", text.Quote(arg))
 		default:
@@ -72,5 +76,5 @@ func ParseArgs(argv []string) (Args, error) {
 	if err != nil || !info.IsDir() {
 		return Args{}, fmt.Errorf("%s: not a directory", text.Display(root))
 	}
-	return Args{Command: command, Root: root, Paths: paths}, nil
+	return Args{Command: command, Root: root, Paths: paths, DryRun: dryRun}, nil
 }
