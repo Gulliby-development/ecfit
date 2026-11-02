@@ -19,7 +19,7 @@ func assertReportText(t *testing.T, got, want string) {
 }
 
 func TestFormatHelpExactLF(t *testing.T) {
-	assertReportText(t, FormatHelp(), "usage: ecfit explain [--root DIR] FILE\n       ecfit check [--root DIR] PATH...\n       ecfit fix [--root DIR] PATH...\n")
+	assertReportText(t, FormatHelp(), "usage: ecfit explain [--root DIR] FILE\n       ecfit check [--root DIR] PATH...\n       ecfit fix [--root DIR] [--dry-run] PATH...\n")
 }
 
 func TestFormatExplainExactSettings(t *testing.T) {
@@ -207,7 +207,7 @@ func TestFormatFixExactTotalsAndCodes(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			assertReportText(t, FormatFix(tc.files), tc.want)
+			assertReportText(t, FormatFix(tc.files, false), tc.want)
 		})
 	}
 }

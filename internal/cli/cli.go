@@ -101,11 +101,13 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	}
 
 	if parsed.Command == "fix" {
-		if err := commit(staged); err != nil {
-			writeError(stderr, err)
-			return 2
+		if !parsed.DryRun {
+			if err := commit(staged); err != nil {
+				writeError(stderr, err)
+				return 2
+			}
 		}
-		_, _ = io.WriteString(stdout, appendSkippedSummary(FormatFix(reports), skipped))
+		_, _ = io.WriteString(stdout, appendSkippedSummary(FormatFix(reports, parsed.DryRun), skipped))
 		if hasFindings(reports) {
 			return 1
 		}

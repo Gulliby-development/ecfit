@@ -38,7 +38,7 @@ func TestRunIntegrationCases(t *testing.T) {
 
 	display := func(path string) string { return strings.ReplaceAll(path, "\\", "/") }
 	errorText := func(message string) string { return "ecfit: " + message + "\n" }
-	help := "usage: ecfit explain [--root DIR] FILE\n       ecfit check [--root DIR] PATH...\n       ecfit fix [--root DIR] PATH...\n"
+	help := "usage: ecfit explain [--root DIR] FILE\n       ecfit check [--root DIR] PATH...\n       ecfit fix [--root DIR] [--dry-run] PATH...\n"
 	cases := []struct {
 		name, stdout, stderr string
 		code                 int

@@ -80,7 +80,12 @@ func FormatCheck(files []FileReport, checked int) string {
 }
 
 // FormatFix formats changed-file notices, remaining diagnostics, and totals.
-func FormatFix(files []FileReport) string {
+// With dryRun the notices and the totals say "would fix" instead of "fixed".
+func FormatFix(files []FileReport, dryRun bool) string {
+	verb := "fixed"
+	if dryRun {
+		verb = "would fix"
+	}
 	var output strings.Builder
 	fixedFiles := 0
 	problems := 0
@@ -89,15 +94,15 @@ func FormatFix(files []FileReport) string {
 		if file.Changed {
 			fixedFiles++
 			codes := fixedCodes(file.OriginalFindings)
-			fmt.Fprintf(&output, "%s: fixed %s\n", display, strings.Join(codes, ", "))
+			fmt.Fprintf(&output, "%s: %s %s\n", display, verb, strings.Join(codes, ", "))
 		}
 		for _, finding := range file.Findings {
 			fmt.Fprintf(&output, "%s:%d: %s %s\n", display, finding.Line, finding.Code, finding.Message)
 			problems++
 		}
 	}
-	fmt.Fprintf(&output, "fixed %d %s, %d %s left\n",
-		fixedFiles, text.Plural(fixedFiles, "file", "files"),
+	fmt.Fprintf(&output, "%s %d %s, %d %s left\n",
+		verb, fixedFiles, text.Plural(fixedFiles, "file", "files"),
 		problems, text.Plural(problems, "problem", "problems"))
 	return output.String()
 }

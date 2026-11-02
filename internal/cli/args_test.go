@@ -95,7 +95,7 @@ func TestRunArgumentOutput(t *testing.T) {
 		{
 			name:       "help prints exact usage",
 			argv:       func(string) []string { return []string{"--help"} },
-			wantStdout: "usage: ecfit explain [--root DIR] FILE\n       ecfit check [--root DIR] PATH...\n       ecfit fix [--root DIR] PATH...\n",
+			wantStdout: "usage: ecfit explain [--root DIR] FILE\n       ecfit check [--root DIR] PATH...\n       ecfit fix [--root DIR] [--dry-run] PATH...\n",
 			wantStderr: func(string) string { return "" },
 		},
 		{

@@ -41,7 +41,7 @@ func TestREADMEContract(t *testing.T) {
 	}
 
 	for _, block := range []string{
-		"usage: ecfit explain [--root DIR] FILE\n       ecfit check [--root DIR] PATH...\n       ecfit fix [--root DIR] PATH...",
+		"usage: ecfit explain [--root DIR] FILE\n       ecfit check [--root DIR] PATH...\n       ecfit fix [--root DIR] [--dry-run] PATH...",
 		"root = true\n\n[*]\nend_of_line = lf\ninsert_final_newline = true\ntrim_trailing_whitespace = true\ncharset = utf-8\n\n[*.{go,mod}]\nindent_style = tab\n\n[*.{js,json,yml}]\nindent_style = space\nindent_size = 2\n\n[Makefile]\nindent_style = tab\n\n[docs/**.md]\nmax_line_length = 80\ntrim_trailing_whitespace = false",
 		"web/app.js\n  charset = utf-8                  .editorconfig:7\n  end_of_line = lf                 .editorconfig:4\n  indent_size = 4                  web/.editorconfig:2\n  indent_style = space             .editorconfig:13\n  insert_final_newline = true      .editorconfig:5\n  max_line_length = 60             web/.editorconfig:3\n  trim_trailing_whitespace = true  .editorconfig:6",
 		"./data.json:1: EC007 unexpected byte order mark\n./docs/guide.md:4: EC001 line ends with crlf, expected lf\n./docs/guide.md:4: EC006 line is 87 characters long, the limit is 80\n./main.go:4: EC002 trailing whitespace\n./util.go:4: EC004 indented with a space, expected tabs\n./util.go:5: EC003 missing final newline\n./web/app.js:2: EC005 indent of 2 spaces is not a multiple of 4\n./web/app.js:3: EC005 indent of 3 spaces is not a multiple of 4\n./web/app.js:4: EC004 indented with a tab, expected spaces\n./web/app.js:5: EC006 line is 63 characters long, the limit is 60\n10 problems in 5 files, 8 files checked",
@@ -52,8 +52,8 @@ func TestREADMEContract(t *testing.T) {
 		}
 	}
 
-	if count := strings.Count(document, "```text\n"); count != 4 {
-		t.Errorf("README has %d text example blocks, want exactly 4", count)
+	if count := strings.Count(document, "```text\n"); count != 5 {
+		t.Errorf("README has %d text example blocks, want exactly 5", count)
 	}
 }
 
